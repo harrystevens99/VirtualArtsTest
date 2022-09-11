@@ -26,7 +26,7 @@ public class BlockSystem : MonoBehaviour
     void Start()
     {
         blocks = GameObject.FindGameObjectsWithTag("Block");
-        totalBlocks = blocks.Length-1;
+        totalBlocks = blocks.Length;
     }
 
     // Update is called once per frame
@@ -60,6 +60,8 @@ public class BlockSystem : MonoBehaviour
                                 if (block.GetComponent<Block>().placed == false && placeCheck == true)
                                 {
                                     activeBlocks++;
+                                    block.transform.gameObject.GetComponent<Renderer>().enabled = true;
+                                    block.transform.gameObject.GetComponent<BoxCollider>().enabled = true;
                                     block.transform.position = cubePoint;
                                     block.GetComponent<Block>().placed = true;
                                     placeCheck = false;
@@ -108,6 +110,8 @@ public class BlockSystem : MonoBehaviour
                         particles.Play();
                         hit.transform.gameObject.GetComponent<Renderer>().material.color = new Color(1, 1, 1);
                         hit.transform.gameObject.GetComponent<Block>().placed = false;
+                        hit.transform.gameObject.GetComponent<Renderer>().enabled = false;
+                        hit.transform.gameObject.GetComponent<BoxCollider>().enabled = false;
                         hit.transform.position = new Vector3(1000, 1000, 1000);
                         activeBlocks--;
                         breakCheck = false;

@@ -20,6 +20,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
+    - UnityEngine.UI.InputField
     - UnityEngine.UI.Slider
     - UnityEngine.UI.Text
     - UnityEngine.UI.Toggle
@@ -71,6 +72,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 2812}
     - Class: 114
       Script: {instanceID: 3036}
+    - Class: 114
+      Script: {instanceID: 3106}
     - Class: 114
       Script: {instanceID: 3216}
     - Class: 114
@@ -548,7 +551,7 @@ ScriptsOnlyBuild:
     className: TextContainer
   - hash:
       serializedVersion: 2
-      Hash: 8a878cfe033ad9317f287f7ddc36ffd2
+      Hash: b71ff1e4632f878133e874fce2fbb196
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: BlockSystem
@@ -566,7 +569,7 @@ ScriptsOnlyBuild:
     className: UI
   - hash:
       serializedVersion: 2
-      Hash: e221e0cde5fba3b0a9bc52c89827384b
+      Hash: b37ea0d4da44be230b2bfbbb735fed0c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PauseMenu

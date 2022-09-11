@@ -98,7 +98,7 @@ public class PauseMenu : MonoBehaviour
     {
         blocks = GameObject.FindGameObjectsWithTag("Block");
         int lineCount = 0;
-
+        
 
         foreach (GameObject obj in blocks)
         {
@@ -143,6 +143,8 @@ public class PauseMenu : MonoBehaviour
                         {
                             obj.GetComponent<Renderer>().material.color = new Color(1, 1, 1);
                             obj.GetComponent<Block>().placed = false;
+                            obj.transform.gameObject.GetComponent<Renderer>().enabled = false;
+                            obj.transform.gameObject.GetComponent<BoxCollider>().enabled = false;
                             obj.transform.position = new Vector3(1000, 1000, 1000);
                         }
                     }
@@ -153,13 +155,15 @@ public class PauseMenu : MonoBehaviour
                 {
                     if (blocks[i].GetComponent<Block>() != null)
                     {
-                        Debug.Log(i);
                         string[] str = lines[i].Split(',');
+                        blocks[i].GetComponent<Renderer>().enabled = true;
+                        blocks[i].GetComponent<BoxCollider>().enabled = true;
                         blocks[i].GetComponent<Block>().placed = true;
                         blocks[i].transform.position = new Vector3(int.Parse(str[0]), int.Parse(str[1]), int.Parse(str[2]));
-                        blocks[i].GetComponent<Renderer>().material.color = new Color(float.Parse(str[3]), float.Parse(str[4]), float.Parse(str[5]), float.Parse(str[5]));
+                        blocks[i].GetComponent<Renderer>().material.color = new Color(float.Parse(str[3]), float.Parse(str[4]), float.Parse(str[5]), float.Parse(str[6]));
                     }
                 }
+                blockSystem.activeBlocks = lines.Length;
                 actived = false;
             }
             else
