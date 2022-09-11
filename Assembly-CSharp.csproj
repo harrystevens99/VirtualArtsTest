@@ -59,7 +59,8 @@
     <Compile Include="Assets\Movement.cs" />
     <Compile Include="Assets\MoveLook.cs" />
     <Compile Include="Assets\BlockSystem.cs" />
-    <Compile Include="Assets\WireFrame.cs" />
+    <Compile Include="Assets\Block.cs" />
+    <Compile Include="Assets\UI.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

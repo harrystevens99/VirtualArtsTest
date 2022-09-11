@@ -5,13 +5,15 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     public CharacterController controller;
-    public float MovementSpeed = 10f;
+    public float movementSpeed = 10f;
     public float gravity = -9.81f;
     public Transform feet;
     public float groundCheckRadius = 0.4f;
-    public LayerMask ground;
+    public LayerMask whatIsGround;
     public float jumpForce;
-
+    public bool flying;
+    private int flyDir = 0;
+    private Vector3 flyVector = new Vector3();
     private bool grounded;
     private Vector3 inputVector = new Vector3();
     private Vector3 velocity = new Vector3();
@@ -26,26 +28,52 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        grounded = Physics.CheckSphere(feet.position, groundCheckRadius, ground);
 
-        if(grounded == true && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }
 
         inputVector.x = Input.GetAxis("Horizontal");
         inputVector.z = Input.GetAxis("Vertical");
 
         moveVector = transform.right * inputVector.x + transform.forward * inputVector.z;
+        controller.Move(moveVector * movementSpeed * Time.deltaTime);
 
-        controller.Move(moveVector * MovementSpeed * Time.deltaTime);
-
-        if (Input.GetButtonDown("Jump") && grounded == true)
+        if (flying == false)
         {
-            velocity.y = jumpForce;
+            grounded = Physics.CheckSphere(feet.position, groundCheckRadius, whatIsGround);
+
+            if (grounded == true && velocity.y < 0)
+            {
+                velocity.y = -2f;
+            }
+
+            if (Input.GetKeyDown("space") && grounded == true)
+            {
+                velocity.y = jumpForce;
+            }
+
+            velocity.y += gravity * Time.deltaTime;
+
+            
+        }
+        else
+        {
+            if (Input.GetKey("space"))
+            {
+                flyDir = 1;
+            }
+            else if (Input.GetKey("left shift"))
+            {
+                flyDir = -1;
+            }
+            else
+            {
+                flyDir = 0;
+            }
+
+            flyVector = transform.up * flyDir;
+            velocity = flyVector * movementSpeed;
+
         }
 
-        velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
     }

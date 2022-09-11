@@ -1,9 +1,11 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - Block
     - BlockSystem
     - MoveLook
     - Movement
+    - UI
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     UnityEditor.TestRunner.dll:
@@ -48,6 +50,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 3216}
     - Class: 114
       Script: {instanceID: 18512}
+    - Class: 114
+      Script: {instanceID: 22142}
+    - Class: 114
+      Script: {instanceID: 33420}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 143
@@ -55,10 +61,6 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
-      Script: {instanceID: 0}
-    - Class: 212
-      Script: {instanceID: 0}
-    - Class: 213
       Script: {instanceID: 0}
   scriptHashData:
   - hash:
@@ -255,7 +257,7 @@ ScriptsOnlyBuild:
     className: PlaymodeTestsController
   - hash:
       serializedVersion: 2
-      Hash: fbd32a04662602200509c304bc0fe1ba
+      Hash: 1502848a9d07ce4f2333c0daf02d5a92
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Movement
@@ -501,10 +503,22 @@ ScriptsOnlyBuild:
     className: TextContainer
   - hash:
       serializedVersion: 2
-      Hash: 774991fa23d240358650523626cfafec
+      Hash: 2f261dbc2626d1d921e496807ca6c34d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: BlockSystem
+  - hash:
+      serializedVersion: 2
+      Hash: 5a94529425d27160eeaf2c4c0cc6cf15
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Block
+  - hash:
+      serializedVersion: 2
+      Hash: bf9b37269cdfe0d184dcee9212552446
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: UI
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
