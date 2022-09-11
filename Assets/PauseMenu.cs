@@ -19,12 +19,17 @@ public class PauseMenu : MonoBehaviour
     public GameObject exitGame;
     public Image colourBox;
     public GameObject save;
+    public Text saveText;
     public GameObject load;
+    public Text loadText;
     public Slider r;
     public Slider g;
     public Slider b;
     public Slider a;
+    public GameObject error;
+    public Text errorText;
 
+    private string[] saveFileLines;
     private GameObject[] blocks;
 
     // Start is called before the first frame update
@@ -53,9 +58,11 @@ public class PauseMenu : MonoBehaviour
             exitGame.SetActive(false);
             load.SetActive(false);
             save.SetActive(false);
+            error.SetActive(false);
         }
         else
         {
+            saveFileLines = new string[blockSystem.activeBlocks];
             blockLimitText.text = ("Blocks Remaining: " + (blockSystem.totalBlocks - blockSystem.activeBlocks));
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -67,6 +74,7 @@ public class PauseMenu : MonoBehaviour
             exitGame.SetActive(true);
             load.SetActive(true);
             save.SetActive(true);
+            error.SetActive(true);
         }
     }
 
@@ -89,30 +97,80 @@ public class PauseMenu : MonoBehaviour
     public void Save()
     {
         blocks = GameObject.FindGameObjectsWithTag("Block");
+        int lineCount = 0;
+
+
         foreach (GameObject obj in blocks)
         {
             if(obj.GetComponent<Block>() != null)
             {
                 if (obj.GetComponent<Block>().placed == true)
                 {
-
+                    saveFileLines[lineCount] = "" + obj.transform.position.x + "," + obj.transform.position.y + "," + obj.transform.position.z
+                        + "," + obj.GetComponent<Renderer>().material.color.r + "," + obj.GetComponent<Renderer>().material.color.g + "," + obj.GetComponent<Renderer>().material.color.b
+                        + "," + obj.GetComponent<Renderer>().material.color.a;
+                    lineCount++;
                 }
             }
         }
-
-        string[] lines =
-{
-            "First line", "Second line", "Third line"
-        };
-
-        File.CreateText("WriteLines.txt");
-        File.WriteAllLines("WriteLines.txt", lines);
+        if (saveText.text != "")
+        {
+            File.WriteAllLines(saveText.text + ".txt", saveFileLines);
+        }
+        else
+        {
+            File.WriteAllLines("MyWorld.txt", saveFileLines);
+        }
         actived = false;
     }
 
     public void Load()
     {
-        actived = false;
+        string[] lines;
+
+        blocks = GameObject.FindGameObjectsWithTag("Block");
+        try
+        {
+            lines = File.ReadAllLines(loadText.text);
+
+            if (blocks.Length >= lines.Length)
+            {
+                foreach (GameObject obj in blocks)
+                {
+                    if (obj.GetComponent<Block>() != null)
+                    {
+                        if (obj.GetComponent<Block>().placed == true)
+                        {
+                            obj.GetComponent<Renderer>().material.color = new Color(1, 1, 1);
+                            obj.GetComponent<Block>().placed = false;
+                            obj.transform.position = new Vector3(1000, 1000, 1000);
+                        }
+                    }
+                }
+
+
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (blocks[i].GetComponent<Block>() != null)
+                    {
+                        Debug.Log(i);
+                        string[] str = lines[i].Split(',');
+                        blocks[i].GetComponent<Block>().placed = true;
+                        blocks[i].transform.position = new Vector3(int.Parse(str[0]), int.Parse(str[1]), int.Parse(str[2]));
+                        blocks[i].GetComponent<Renderer>().material.color = new Color(float.Parse(str[3]), float.Parse(str[4]), float.Parse(str[5]), float.Parse(str[5]));
+                    }
+                }
+                actived = false;
+            }
+            else
+            {
+                errorText.text = "Error: Not Enough Blocks!";
+            }
+        }
+        catch(FileNotFoundException e)
+        {
+            errorText.text = "Error: Could Not Find File";
+        }
     }
 
 }
