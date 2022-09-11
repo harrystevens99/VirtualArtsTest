@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveLook : MonoBehaviour
 {
-
+    public Transform wireFrameCamera;
     public float mouseSensitivity = 150f;
     private Vector2 angle = new Vector2();
     public Transform playerTransform;
@@ -25,6 +25,7 @@ public class MoveLook : MonoBehaviour
         if(xRotation >= 90) { xRotation = 90f; }
         if (xRotation <= -90) { xRotation = -90f; }
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        wireFrameCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         playerTransform.Rotate(Vector3.up * angle.x);
 
     }

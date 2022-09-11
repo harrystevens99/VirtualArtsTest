@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{BF2A3150-621A-667A-8498-45D915CD9131}</ProjectGuid>
+    <ProjectGuid>{8B58988B-5721-CBFC-CCB1-85CB78C11F79}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -56,8 +56,10 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\MoveLook.cs" />
     <Compile Include="Assets\Movement.cs" />
+    <Compile Include="Assets\MoveLook.cs" />
+    <Compile Include="Assets\BlockSystem.cs" />
+    <Compile Include="Assets\WireFrame.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
