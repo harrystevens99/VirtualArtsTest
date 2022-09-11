@@ -5,6 +5,7 @@ ScriptsOnlyBuild:
     - BlockSystem
     - MoveLook
     - Movement
+    - PauseMenu
     - UI
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
@@ -12,6 +13,16 @@ ScriptsOnlyBuild:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
+    UnityEngine.UI.dll:
+    - UnityEngine.EventSystems.EventSystem
+    - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.Button
+    - UnityEngine.UI.CanvasScaler
+    - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.Image
+    - UnityEngine.UI.Slider
+    - UnityEngine.UI.Text
+    - UnityEngine.UI.Toggle
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -45,22 +56,56 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
+      Script: {instanceID: 1486}
+    - Class: 114
+      Script: {instanceID: 1624}
+    - Class: 114
+      Script: {instanceID: 1688}
+    - Class: 114
+      Script: {instanceID: 2208}
+    - Class: 114
       Script: {instanceID: 2296}
     - Class: 114
+      Script: {instanceID: 2632}
+    - Class: 114
+      Script: {instanceID: 2812}
+    - Class: 114
+      Script: {instanceID: 3036}
+    - Class: 114
       Script: {instanceID: 3216}
+    - Class: 114
+      Script: {instanceID: 3354}
+    - Class: 114
+      Script: {instanceID: 3490}
     - Class: 114
       Script: {instanceID: 18512}
     - Class: 114
       Script: {instanceID: 22142}
     - Class: 114
       Script: {instanceID: 33420}
+    - Class: 114
+      Script: {instanceID: 66332}
     - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 143
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 198
+      Script: {instanceID: 0}
+    - Class: 199
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
   scriptHashData:
   - hash:
@@ -257,7 +302,7 @@ ScriptsOnlyBuild:
     className: PlaymodeTestsController
   - hash:
       serializedVersion: 2
-      Hash: 1502848a9d07ce4f2333c0daf02d5a92
+      Hash: 780c543c27cfe1a674f9b2cb8aada853
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Movement
@@ -425,7 +470,7 @@ ScriptsOnlyBuild:
     className: TestResultRendererCallback
   - hash:
       serializedVersion: 2
-      Hash: d02af68ec90c5bd0f718efc83291e18b
+      Hash: 1765524037397d128d4117f9c9be9a7e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MoveLook
@@ -503,7 +548,7 @@ ScriptsOnlyBuild:
     className: TextContainer
   - hash:
       serializedVersion: 2
-      Hash: 2f261dbc2626d1d921e496807ca6c34d
+      Hash: 8a878cfe033ad9317f287f7ddc36ffd2
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: BlockSystem
@@ -515,10 +560,16 @@ ScriptsOnlyBuild:
     className: Block
   - hash:
       serializedVersion: 2
-      Hash: bf9b37269cdfe0d184dcee9212552446
+      Hash: 5bb390bdb53b44291fb5946f86537d59
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: UI
+  - hash:
+      serializedVersion: 2
+      Hash: e221e0cde5fba3b0a9bc52c89827384b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PauseMenu
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

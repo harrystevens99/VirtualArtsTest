@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    public PauseMenu menu;
     public CharacterController controller;
     public float movementSpeed = 10f;
     public float gravity = -9.81f;
@@ -29,52 +30,54 @@ public class Movement : MonoBehaviour
     void Update()
     {
 
-
-        inputVector.x = Input.GetAxis("Horizontal");
-        inputVector.z = Input.GetAxis("Vertical");
-
-        moveVector = transform.right * inputVector.x + transform.forward * inputVector.z;
-        controller.Move(moveVector * movementSpeed * Time.deltaTime);
-
-        if (flying == false)
+        if (menu.actived == false)
         {
-            grounded = Physics.CheckSphere(feet.position, groundCheckRadius, whatIsGround);
+            inputVector.x = Input.GetAxis("Horizontal");
+            inputVector.z = Input.GetAxis("Vertical");
 
-            if (grounded == true && velocity.y < 0)
-            {
-                velocity.y = -2f;
-            }
+            moveVector = transform.right * inputVector.x + transform.forward * inputVector.z;
+            controller.Move(moveVector * movementSpeed * Time.deltaTime);
 
-            if (Input.GetKeyDown("space") && grounded == true)
+            if (flying == false)
             {
-                velocity.y = jumpForce;
-            }
+                grounded = Physics.CheckSphere(feet.position, groundCheckRadius, whatIsGround);
 
-            velocity.y += gravity * Time.deltaTime;
+                if (grounded == true && velocity.y < 0)
+                {
+                    velocity.y = -2f;
+                }
 
-            
-        }
-        else
-        {
-            if (Input.GetKey("space"))
-            {
-                flyDir = 1;
-            }
-            else if (Input.GetKey("left shift"))
-            {
-                flyDir = -1;
+                if (Input.GetKeyDown("space") && grounded == true)
+                {
+                    velocity.y = jumpForce;
+                }
+
+                velocity.y += gravity * Time.deltaTime;
+
+
             }
             else
             {
-                flyDir = 0;
+                if (Input.GetKey("space"))
+                {
+                    flyDir = 1;
+                }
+                else if (Input.GetKey("left shift"))
+                {
+                    flyDir = -1;
+                }
+                else
+                {
+                    flyDir = 0;
+                }
+
+                flyVector = transform.up * flyDir;
+                velocity = flyVector * movementSpeed;
+
             }
 
-            flyVector = transform.up * flyDir;
-            velocity = flyVector * movementSpeed;
 
+            controller.Move(velocity * Time.deltaTime);
         }
-
-
-        controller.Move(velocity * Time.deltaTime);
     }
 }
