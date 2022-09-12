@@ -28,6 +28,7 @@ public class PauseMenu : MonoBehaviour
     public Slider a;
     public GameObject error;
     public Text errorText;
+    public UI ui;
 
     private string[] saveFileLines;
     private GameObject[] blocks;
@@ -44,6 +45,35 @@ public class PauseMenu : MonoBehaviour
         if (Input.GetKeyDown("escape"))
         {
             actived = !actived;
+
+            if(actived == true)
+            {
+                if (ui.mode == 3)
+                {
+                    blockSystem.orbUp.gameObject.transform.position = new Vector3(1000, 1000, 1000);
+                    blockSystem.orbDown.gameObject.transform.position = new Vector3(1000, 1000, 1000);
+                    blockSystem.orbLeft.gameObject.transform.position = new Vector3(1000, 1000, 1000);
+                    blockSystem.orbRight.gameObject.transform.position = new Vector3(1000, 1000, 1000);
+                    blockSystem.orbForward.gameObject.transform.position = new Vector3(1000, 1000, 1000);
+                    blockSystem.orbBack.gameObject.transform.position = new Vector3(1000, 1000, 1000);
+
+                    blockSystem.moving = false;
+
+                    foreach (GameObject block in blockSystem.blocks)
+                    {
+                        if (block.GetComponent<Block>() != null)
+                        {
+                            if (block.GetComponent<Block>().placed == true && block.GetComponent<Block>().selected == true)
+                            {
+                                block.GetComponent<Renderer>().material.SetFloat("_Metallic", 0f);
+                                block.GetComponent<Block>().selected = false;
+                            }
+                        }
+                    }
+
+                    ui.mode--;
+                }
+            }
         }
 
         if(actived == false)
