@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BlockSystem : MonoBehaviour
 {
+    //Class for block system, which contains code for the different builder modes (placing blocks, moving blocks etc).
+
     public MoveLook mainCamera;
     public PauseMenu menu;
     public GameObject wireFrameCube;
@@ -49,8 +51,10 @@ public class BlockSystem : MonoBehaviour
             switch (ui.mode)
             {
                 case 0:
+                    //Cube placement
                     if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 5, placeable))
                     {
+                        //Snap cube to grid
                         cubePoint.x = Mathf.RoundToInt(hit.point.x);
                         cubePoint.y = Mathf.RoundToInt(hit.point.y);
                         cubePoint.z = Mathf.RoundToInt(hit.point.z);
@@ -59,10 +63,12 @@ public class BlockSystem : MonoBehaviour
                     }
                     else
                     {
+                        //If surface is non-placeable or out of range, target cube is moved out of bounds
                         wireFrameCube.transform.position = new Vector3(1000, 1000, 1000);
                         canPlace = false;
                     }
 
+                    //Place cube
                     if (canPlace == true && Input.GetMouseButtonDown(0) && placeCheck == true)
                     {
                         foreach (GameObject block in blocks)
@@ -93,6 +99,7 @@ public class BlockSystem : MonoBehaviour
                     }
                     break;
                 case 1:
+                    //Paint cube
                     if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 5, breakAble))
                     {
                         cubePoint = hit.transform.position;
@@ -113,6 +120,7 @@ public class BlockSystem : MonoBehaviour
                     }
                     break;
                 case 2:
+                    //Remove cube
                     if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 5, breakAble))
                     {
                         cubePoint = hit.transform.position;
@@ -129,6 +137,8 @@ public class BlockSystem : MonoBehaviour
                     {
                         particles.transform.position = cubePoint;
                         particles.startColor = hit.transform.gameObject.GetComponent<Renderer>().material.color;
+                        //Alpha channel set to 1 as transparent blocks would otherwise create invisible particles
+                        particles.startColor = new Color(particles.startColor.r, particles.startColor.g, particles.startColor.b, 1);
                         particles.Play();
                         hit.transform.gameObject.GetComponent<Renderer>().material.color = new Color(1, 1, 1);
                         hit.transform.gameObject.GetComponent<Block>().placed = false;
@@ -142,6 +152,7 @@ public class BlockSystem : MonoBehaviour
                     }
                     break;
                 case 3:
+                    //Move cube
                     if (moving == false)
                     {
                         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 5, breakAble))
@@ -166,6 +177,7 @@ public class BlockSystem : MonoBehaviour
                             orbForward.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z + 2f);
                             orbBack.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 2f);
 
+                            //All cubes un-selected first
                             foreach (GameObject block in blocks)
                             {
                                 if (block.GetComponent<Block>() != null)
@@ -180,12 +192,14 @@ public class BlockSystem : MonoBehaviour
 
                             moving = true;
 
+                            //Find cubes to be selected
                             FindCubes(hit.transform);
 
                             foreach (GameObject block in blocks)
                             {
                                 if (block.GetComponent<Block>() != null)
                                 {
+                                    //if any placed cube finds an adjacent cube in a given direction, the corresponding move sphere is turned off
                                     if (block.GetComponent<Block>().placed == true && block.GetComponent<Block>().selected == true)
                                     {
                                         if (CheckDirection(block.transform, orbUp.gameObject.GetComponent<Orb>().direction))
@@ -231,6 +245,7 @@ public class BlockSystem : MonoBehaviour
 
                         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 100, orbs))
                         {
+                            //Direction selection, stored in "hit"
                             hit.transform.gameObject.GetComponent<Renderer>().material.color = new Color(0, 1, 1, 1);
                             canBreak = true;
                         }
@@ -241,6 +256,7 @@ public class BlockSystem : MonoBehaviour
 
                         if (canBreak == true && Input.GetMouseButtonDown(0) && breakCheck == true)
                         {
+                            //Move selected blocks in given direction
                             foreach (GameObject block in blocks)
                             {
                                 if (block.GetComponent<Block>() != null)
@@ -264,6 +280,7 @@ public class BlockSystem : MonoBehaviour
                             {
                                 if (block.GetComponent<Block>() != null)
                                 {
+                                    //Every time blocks are moved, each direction is checked again to see if there is room to move in that direction
                                     if (block.GetComponent<Block>().placed == true && block.GetComponent<Block>().selected == true)
                                     {
                                         if (CheckDirection(block.transform, orbUp.gameObject.GetComponent<Orb>().direction))
@@ -308,6 +325,7 @@ public class BlockSystem : MonoBehaviour
         }
     }
 
+    //Given a block and a direction, check if there is an unselected block in that direction
     bool CheckDirection(Transform point, Vector3 direction)
     {
         if(direction.x == 1)
@@ -380,6 +398,7 @@ public class BlockSystem : MonoBehaviour
         return false;
     }
 
+    //Recursive function to select all cubes which are adjacent to the initially selected cube
     void FindCubes(Transform point)
     {
         point.gameObject.GetComponent<Block>().selected = true;

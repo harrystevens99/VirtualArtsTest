@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MoveLook : MonoBehaviour
 {
+    //Class to control camera movement.
+
     public float mouseSensitivity = 150f;
     private Vector2 angle = new Vector2();
     public Transform playerTransform;

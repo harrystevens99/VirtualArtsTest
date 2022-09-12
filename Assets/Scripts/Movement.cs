@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    //Class to control player movement.
+
     public PauseMenu menu;
     public CharacterController controller;
     public float movementSpeed = 10f;
@@ -38,6 +40,7 @@ public class Movement : MonoBehaviour
             moveVector = transform.right * inputVector.x + transform.forward * inputVector.z;
             controller.Move(moveVector * movementSpeed * Time.deltaTime);
 
+            //Different controls for flying and grounded movement
             if (flying == false)
             {
                 grounded = Physics.CheckSphere(feet.position, groundCheckRadius, whatIsGround);

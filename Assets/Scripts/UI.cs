@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
+    //Class which controls the UI hot-bar.
+
     public int mode = 0;
-    public Renderer cube;
-    public Renderer paintBrush;
-    public Renderer picAxe;
-    public Renderer move;
+    public Image cube;
+    public Image paintBrush;
+    public Image picAxe;
+    public Image move;
     public Color selectedColour;
     public Color deselectedColour;
     public PauseMenu menu;
@@ -25,6 +28,7 @@ public class UI : MonoBehaviour
     {
         if (menu.actived == false)
         {
+            //When moving out of "move mode" de-select all blocks
             if (Input.GetKeyDown("q") && mode > 0)
             {
                 if (mode == 3)
@@ -62,28 +66,28 @@ public class UI : MonoBehaviour
             switch (mode)
             {
                 case 0:
-                    cube.material.color = selectedColour;
-                    paintBrush.material.color = deselectedColour;
-                    picAxe.material.color = deselectedColour;
-                    move.material.color = deselectedColour;
+                    cube.color = selectedColour;
+                    paintBrush.color = deselectedColour;
+                    picAxe.color = deselectedColour;
+                    move.color = deselectedColour;
                     break;
                 case 1:
-                    cube.material.color = deselectedColour;
-                    paintBrush.material.color = selectedColour;
-                    picAxe.material.color = deselectedColour;
-                    move.material.color = deselectedColour;
+                    cube.color = deselectedColour;
+                    paintBrush.color = selectedColour;
+                    picAxe.color = deselectedColour;
+                    move.color = deselectedColour;
                     break;
                 case 2:
-                    cube.material.color = deselectedColour;
-                    paintBrush.material.color = deselectedColour;
-                    picAxe.material.color = selectedColour;
-                    move.material.color = deselectedColour;
+                    cube.color = deselectedColour;
+                    paintBrush.color = deselectedColour;
+                    picAxe.color = selectedColour;
+                    move.color = deselectedColour;
                     break;
                 case 3:
-                    cube.material.color = deselectedColour;
-                    paintBrush.material.color = deselectedColour;
-                    picAxe.material.color = deselectedColour;
-                    move.material.color = selectedColour;
+                    cube.color = deselectedColour;
+                    paintBrush.color = deselectedColour;
+                    picAxe.color = deselectedColour;
+                    move.color = selectedColour;
                     break;
             }
         }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Orb : MonoBehaviour
 {
+    //Class to contain direction variable for orbs in move mode.
 
     public Vector3 direction;
     // Start is called before the first frame update

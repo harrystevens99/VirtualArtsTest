@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
+    //Class for the pause menu, which includes different options and saving/loading
 
     public bool actived = false;
     public Movement movement;
@@ -47,7 +48,7 @@ public class PauseMenu : MonoBehaviour
         if (Input.GetKeyDown("escape"))
         {
             actived = !actived;
-
+            //When activated, exit move mode. This avoids conflicts when choosing to load structures
             if(actived == true)
             {
                 if (ui.mode == 3)
@@ -140,9 +141,10 @@ public class PauseMenu : MonoBehaviour
             {
                 if (obj.GetComponent<Block>().placed == true)
                 {
+                    //File structure for saving
                     saveFileLines[lineCount] = "" + obj.transform.position.x + "," + obj.transform.position.y + "," + obj.transform.position.z
                         + "," + obj.GetComponent<Renderer>().material.color.r + "," + obj.GetComponent<Renderer>().material.color.g + "," + obj.GetComponent<Renderer>().material.color.b
-                        + "," + obj.GetComponent<Renderer>().material.color.a;
+                        + "," + obj.GetComponent<Renderer>().material.color.a + "," + obj.GetComponent<Block>().type;
                     lineCount++;
                 }
             }
@@ -169,6 +171,7 @@ public class PauseMenu : MonoBehaviour
 
             if (blocks.Length >= lines.Length)
             {
+                //Begin by removing all blocks
                 foreach (GameObject obj in blocks)
                 {
                     if (obj.GetComponent<Block>() != null)
@@ -184,7 +187,7 @@ public class PauseMenu : MonoBehaviour
                     }
                 }
 
-
+                //place each block as described in file
                 for (int i = 0; i < lines.Length; i++)
                 {
                     if (blocks[i].GetComponent<Block>() != null)
@@ -195,6 +198,16 @@ public class PauseMenu : MonoBehaviour
                         blocks[i].GetComponent<Block>().placed = true;
                         blocks[i].transform.position = new Vector3(int.Parse(str[0]), int.Parse(str[1]), int.Parse(str[2]));
                         blocks[i].GetComponent<Renderer>().material.color = new Color(float.Parse(str[3]), float.Parse(str[4]), float.Parse(str[5]), float.Parse(str[6]));
+                        blocks[i].GetComponent<Block>().type = int.Parse(str[7]);
+                        switch (int.Parse(str[7]))
+                        {
+                            case 0:
+                                blocks[i].GetComponent<MeshFilter>().mesh = blockSystem.cube;
+                                break;
+                            case 1:
+                                blocks[i].GetComponent<MeshFilter>().mesh = blockSystem.sphere;
+                                break;
+                        }
                     }
                 }
                 blockSystem.activeBlocks = lines.Length;

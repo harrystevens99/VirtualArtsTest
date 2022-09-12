@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Block : MonoBehaviour
 {
+    //Class for blocks.
 
     public bool placed = false;
     public bool selected = false;
