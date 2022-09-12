@@ -32,6 +32,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject error;
     public Text errorText;
     public UI ui;
+    public Toggle fullscreenToggle;
+    public GameObject fullscreen;
 
     private string[] saveFileLines;
     private GameObject[] blocks;
@@ -93,6 +95,7 @@ public class PauseMenu : MonoBehaviour
             save.SetActive(false);
             error.SetActive(false);
             blockTypeText.SetActive(false);
+            fullscreen.SetActive(false);
         }
         else
         {
@@ -110,6 +113,7 @@ public class PauseMenu : MonoBehaviour
             save.SetActive(true);
             error.SetActive(true);
             blockTypeText.SetActive(true);
+            fullscreen.SetActive(true);
         }
     }
 
@@ -227,6 +231,20 @@ public class PauseMenu : MonoBehaviour
     public void ChangeType()
     {
         blockSystem.blockType = blockType.value;
+    }
+
+    public void Fullscreen()
+    {
+        if(fullscreenToggle.isOn == true)
+        {
+            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+        }
+        else
+        {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
+        }
+        
+
     }
 
 }
