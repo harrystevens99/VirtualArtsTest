@@ -22,6 +22,8 @@ public class PauseMenu : MonoBehaviour
     public Text saveText;
     public GameObject load;
     public Text loadText;
+    public GameObject blockTypeText;
+    public Dropdown blockType;
     public Slider r;
     public Slider g;
     public Slider b;
@@ -89,6 +91,7 @@ public class PauseMenu : MonoBehaviour
             load.SetActive(false);
             save.SetActive(false);
             error.SetActive(false);
+            blockTypeText.SetActive(false);
         }
         else
         {
@@ -105,6 +108,7 @@ public class PauseMenu : MonoBehaviour
             load.SetActive(true);
             save.SetActive(true);
             error.SetActive(true);
+            blockTypeText.SetActive(true);
         }
     }
 
@@ -205,6 +209,11 @@ public class PauseMenu : MonoBehaviour
         {
             errorText.text = "Error: Could Not Find File";
         }
+    }
+
+    public void ChangeType()
+    {
+        blockSystem.blockType = blockType.value;
     }
 
 }

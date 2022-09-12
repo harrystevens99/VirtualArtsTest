@@ -56,13 +56,13 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\BlockSystem.cs" />
-    <Compile Include="Assets\Movement.cs" />
-    <Compile Include="Assets\Block.cs" />
-    <Compile Include="Assets\PauseMenu.cs" />
-    <Compile Include="Assets\MoveLook.cs" />
-    <Compile Include="Assets\UI.cs" />
-    <Compile Include="Assets\Orb.cs" />
+    <Compile Include="Assets\Scripts\BlockSystem.cs" />
+    <Compile Include="Assets\Scripts\Movement.cs" />
+    <Compile Include="Assets\Scripts\Block.cs" />
+    <Compile Include="Assets\Scripts\PauseMenu.cs" />
+    <Compile Include="Assets\Scripts\MoveLook.cs" />
+    <Compile Include="Assets\Scripts\UI.cs" />
+    <Compile Include="Assets\Scripts\Orb.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

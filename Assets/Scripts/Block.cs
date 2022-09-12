@@ -7,6 +7,7 @@ public class Block : MonoBehaviour
 
     public bool placed = false;
     public bool selected = false;
+    public int type = 0;
 
     // Start is called before the first frame update
     void Start()

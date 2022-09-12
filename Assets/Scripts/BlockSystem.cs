@@ -21,6 +21,8 @@ public class BlockSystem : MonoBehaviour
     public Renderer orbRight;
     public Renderer orbForward;
     public Renderer orbBack;
+    public Mesh sphere;
+    public Mesh cube;
     public bool moving;
     private bool canPlace;
     private bool placeCheck = true;
@@ -28,6 +30,7 @@ public class BlockSystem : MonoBehaviour
     private bool breakCheck = true;
     private Vector3 cubePoint = new Vector3();
     public GameObject[] blocks;
+    public int blockType = 0;
     private RaycastHit hit;
     
 
@@ -69,6 +72,16 @@ public class BlockSystem : MonoBehaviour
                                 if (block.GetComponent<Block>().placed == false && placeCheck == true)
                                 {
                                     activeBlocks++;
+                                    block.GetComponent<Block>().type = blockType;
+                                    switch (blockType)
+                                    {
+                                        case 0:
+                                            block.GetComponent<MeshFilter>().mesh = cube;
+                                            break;
+                                        case 1:
+                                            block.GetComponent<MeshFilter>().mesh = sphere;
+                                            break;
+                                    }
                                     block.transform.gameObject.GetComponent<Renderer>().enabled = true;
                                     block.transform.gameObject.GetComponent<BoxCollider>().enabled = true;
                                     block.transform.position = cubePoint;
@@ -121,6 +134,8 @@ public class BlockSystem : MonoBehaviour
                         hit.transform.gameObject.GetComponent<Block>().placed = false;
                         hit.transform.gameObject.GetComponent<Renderer>().enabled = false;
                         hit.transform.gameObject.GetComponent<BoxCollider>().enabled = false;
+                        hit.transform.gameObject.GetComponent<Block>().type = 0;
+                        hit.transform.gameObject.GetComponent<MeshFilter>().mesh = cube;
                         hit.transform.position = new Vector3(1000, 1000, 1000);
                         activeBlocks--;
                         breakCheck = false;
