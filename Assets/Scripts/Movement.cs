@@ -6,14 +6,14 @@ public class Movement : MonoBehaviour
 {
     //Class to control player movement.
 
-    public PauseMenu menu;
-    public CharacterController controller;
-    public float movementSpeed = 10f;
-    public float gravity = -9.81f;
-    public Transform feet;
-    public float groundCheckRadius = 0.4f;
-    public LayerMask whatIsGround;
-    public float jumpForce;
+    [SerializeField] private PauseMenu menu;
+    [SerializeField] private CharacterController controller;
+    [SerializeField] private float movementSpeed = 10f;
+    [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private Transform feet;
+    [SerializeField] private float groundCheckRadius = 0.4f;
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private float jumpForce;
     public bool flying;
     private int flyDir = 0;
     private Vector3 flyVector = new Vector3();

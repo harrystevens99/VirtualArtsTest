@@ -14082,7 +14082,15 @@ MonoBehaviour:
   cube: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   moving: 0
   blocks: []
+  blockScripts: []
   blockType: 0
+  orbObjects:
+  - {fileID: 645218891}
+  - {fileID: 889426842}
+  - {fileID: 1925986603}
+  - {fileID: 39567837}
+  - {fileID: 572838996}
+  - {fileID: 1685525782}
 --- !u!4 &181718952
 Transform:
   m_ObjectHideFlags: 0
@@ -105933,7 +105941,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1603266613}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}

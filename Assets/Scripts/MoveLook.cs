@@ -6,10 +6,10 @@ public class MoveLook : MonoBehaviour
 {
     //Class to control camera movement.
 
-    public float mouseSensitivity = 150f;
+    [SerializeField] private float mouseSensitivity = 150f;
     private Vector2 angle = new Vector2();
-    public Transform playerTransform;
-    public PauseMenu menu;
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private PauseMenu menu;
     private float xRotation = 0f;
 
     // Start is called before the first frame update

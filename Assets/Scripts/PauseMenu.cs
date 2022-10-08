@@ -9,31 +9,31 @@ public class PauseMenu : MonoBehaviour
     //Class for the pause menu, which includes different options and saving/loading
 
     public bool actived = false;
-    public Movement movement;
-    public BlockSystem blockSystem;
-    public GameObject panel;
-    public GameObject paintText;
-    public GameObject flyText;
-    public GameObject flyToggle;
-    public GameObject blockLimit;
-    public Text blockLimitText;
-    public GameObject exitGame;
-    public Image colourBox;
-    public GameObject save;
-    public Text saveText;
-    public GameObject load;
-    public Text loadText;
-    public GameObject blockTypeText;
-    public Dropdown blockType;
-    public Slider r;
-    public Slider g;
-    public Slider b;
-    public Slider a;
-    public GameObject error;
-    public Text errorText;
-    public UI ui;
-    public Toggle fullscreenToggle;
-    public GameObject fullscreen;
+    [SerializeField] private Movement movement;
+    [SerializeField] private BlockSystem blockSystem;
+    [SerializeField] private GameObject panel;
+    [SerializeField] private GameObject paintText;
+    [SerializeField] private GameObject flyText;
+    [SerializeField] private GameObject flyToggle;
+    [SerializeField] private GameObject blockLimit;
+    [SerializeField] private Text blockLimitText;
+    [SerializeField] private GameObject exitGame;
+    [SerializeField] private Image colourBox;
+    [SerializeField] private GameObject save;
+    [SerializeField] private Text saveText;
+    [SerializeField] private GameObject load;
+    [SerializeField] private Text loadText;
+    [SerializeField] private GameObject blockTypeText;
+    [SerializeField] private Dropdown blockType;
+    [SerializeField] private Slider r;
+    [SerializeField] private Slider g;
+    [SerializeField] private Slider b;
+    [SerializeField] private Slider a;
+    [SerializeField] private GameObject error;
+    [SerializeField] private Text errorText;
+    [SerializeField] private UI ui;
+    [SerializeField] private Toggle fullscreenToggle;
+    [SerializeField] private GameObject fullscreen;
 
     private string[] saveFileLines;
     private GameObject[] blocks;
@@ -64,14 +64,14 @@ public class PauseMenu : MonoBehaviour
 
                     blockSystem.moving = false;
 
-                    foreach (GameObject block in blockSystem.blocks)
+                    for (int i = 0; i < blockSystem.blocks.Length; i++)
                     {
-                        if (block.GetComponent<Block>() != null)
+                        if (blockSystem.blocks[i] != null)
                         {
-                            if (block.GetComponent<Block>().placed == true && block.GetComponent<Block>().selected == true)
+                            if (blockSystem.blockScripts[i].placed == true && blockSystem.blockScripts[i].selected == true)
                             {
-                                block.GetComponent<Renderer>().material.SetFloat("_Metallic", 0f);
-                                block.GetComponent<Block>().selected = false;
+                                blockSystem.blockRenderers[i].material.SetFloat("_Metallic", 0f);
+                                blockSystem.blockScripts[i].selected = false;
                             }
                         }
                     }
@@ -139,20 +139,21 @@ public class PauseMenu : MonoBehaviour
         int lineCount = 0;
         
 
-        foreach (GameObject obj in blocks)
+        for(int i = 0; i < blockSystem.blocks.Length; i++)
         {
-            if(obj.GetComponent<Block>() != null)
+            if(blockSystem.blockScripts[i] != null)
             {
-                if (obj.GetComponent<Block>().placed == true)
+                if(blockSystem.blockScripts[i].placed == true)
                 {
                     //File structure for saving
-                    saveFileLines[lineCount] = "" + obj.transform.position.x + "," + obj.transform.position.y + "," + obj.transform.position.z
-                        + "," + obj.GetComponent<Renderer>().material.color.r + "," + obj.GetComponent<Renderer>().material.color.g + "," + obj.GetComponent<Renderer>().material.color.b
-                        + "," + obj.GetComponent<Renderer>().material.color.a + "," + obj.GetComponent<Block>().type;
+                    saveFileLines[lineCount] = "" + blockSystem.blocks[i].transform.position.x + "," + blockSystem.blocks[i].transform.position.y + "," + blockSystem.blocks[i].transform.position.z
+                        + "," + blockSystem.blockRenderers[i].material.color.r + "," + blockSystem.blockRenderers[i].material.color.g + "," + blockSystem.blockRenderers[i].material.color.b
+                        + "," + blockSystem.blockRenderers[i].material.color.a + "," + blockSystem.blockScripts[i].type;
                     lineCount++;
                 }
             }
         }
+
         if (saveText.text != "")
         {
             File.WriteAllLines(saveText.text + ".txt", saveFileLines);
@@ -167,7 +168,6 @@ public class PauseMenu : MonoBehaviour
     public void Load()
     {
         string[] lines;
-
         blocks = GameObject.FindGameObjectsWithTag("Block");
         try
         {
@@ -176,17 +176,18 @@ public class PauseMenu : MonoBehaviour
             if (blocks.Length >= lines.Length)
             {
                 //Begin by removing all blocks
-                foreach (GameObject obj in blocks)
+
+                for(int i = 0; i < blockSystem.blocks.Length; i++)
                 {
-                    if (obj.GetComponent<Block>() != null)
+                    if(blockSystem.blockScripts[i] != null)
                     {
-                        if (obj.GetComponent<Block>().placed == true)
+                        if(blockSystem.blockScripts[i].placed == true)
                         {
-                            obj.GetComponent<Renderer>().material.color = new Color(1, 1, 1);
-                            obj.GetComponent<Block>().placed = false;
-                            obj.transform.gameObject.GetComponent<Renderer>().enabled = false;
-                            obj.transform.gameObject.GetComponent<BoxCollider>().enabled = false;
-                            obj.transform.position = new Vector3(1000, 1000, 1000);
+                            blockSystem.blockRenderers[i].material.color = new Color(1, 1, 1);
+                            blockSystem.blockScripts[i].placed = false;
+                            blockSystem.blockRenderers[i].enabled = false;
+                            blockSystem.blockColliders[i].enabled = false;
+                            blockSystem.blocks[i].transform.position = new Vector3(1000, 1000, 1000);
                         }
                     }
                 }
@@ -194,22 +195,22 @@ public class PauseMenu : MonoBehaviour
                 //place each block as described in file
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    if (blocks[i].GetComponent<Block>() != null)
+                    if (blockSystem.blockScripts[i] != null)
                     {
                         string[] str = lines[i].Split(',');
-                        blocks[i].GetComponent<Renderer>().enabled = true;
-                        blocks[i].GetComponent<BoxCollider>().enabled = true;
-                        blocks[i].GetComponent<Block>().placed = true;
-                        blocks[i].transform.position = new Vector3(int.Parse(str[0]), int.Parse(str[1]), int.Parse(str[2]));
-                        blocks[i].GetComponent<Renderer>().material.color = new Color(float.Parse(str[3]), float.Parse(str[4]), float.Parse(str[5]), float.Parse(str[6]));
-                        blocks[i].GetComponent<Block>().type = int.Parse(str[7]);
+                        blockSystem.blockRenderers[i].enabled = true;
+                        blockSystem.blockColliders[i].enabled = true;
+                        blockSystem.blockScripts[i].placed = true;
+                        blockSystem.blocks[i].transform.position = new Vector3(int.Parse(str[0]), int.Parse(str[1]), int.Parse(str[2]));
+                        blockSystem.blockRenderers[i].material.color = new Color(float.Parse(str[3]), float.Parse(str[4]), float.Parse(str[5]), float.Parse(str[6]));
+                        blockSystem.blockScripts[i].type = int.Parse(str[7]);
                         switch (int.Parse(str[7]))
                         {
                             case 0:
-                                blocks[i].GetComponent<MeshFilter>().mesh = blockSystem.cube;
+                                blockSystem.blockMeshFilters[i].mesh = blockSystem.cube;
                                 break;
                             case 1:
-                                blocks[i].GetComponent<MeshFilter>().mesh = blockSystem.sphere;
+                                blockSystem.blockMeshFilters[i].mesh = blockSystem.sphere;
                                 break;
                         }
                     }

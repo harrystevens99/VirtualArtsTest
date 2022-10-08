@@ -8,14 +8,14 @@ public class UI : MonoBehaviour
     //Class which controls the UI hot-bar.
 
     public int mode = 0;
-    public Image cube;
-    public Image paintBrush;
-    public Image picAxe;
-    public Image move;
-    public Color selectedColour;
-    public Color deselectedColour;
-    public PauseMenu menu;
-    public BlockSystem blockSystem;
+    [SerializeField] private Image cube;
+    [SerializeField] private Image paintBrush;
+    [SerializeField] private Image picAxe;
+    [SerializeField] private Image move;
+    [SerializeField] private Color selectedColour;
+    [SerializeField] private Color deselectedColour;
+    [SerializeField] private PauseMenu menu;
+    [SerializeField] private BlockSystem blockSystem;
 
     // Start is called before the first frame update
     void Start()
@@ -42,14 +42,14 @@ public class UI : MonoBehaviour
 
                     blockSystem.moving = false;
 
-                    foreach (GameObject block in blockSystem.blocks)
+                    for(int i = 0; i < blockSystem.blocks.Length; i++)
                     {
-                        if (block.GetComponent<Block>() != null)
+                        if(blockSystem.blocks[i] != null)
                         {
-                            if (block.GetComponent<Block>().placed == true && block.GetComponent<Block>().selected == true)
+                            if(blockSystem.blockScripts[i].placed == true && blockSystem.blockScripts[i].selected == true)
                             {
-                                block.GetComponent<Renderer>().material.SetFloat("_Metallic", 0f);
-                                block.GetComponent<Block>().selected = false;
+                                blockSystem.blockRenderers[i].material.SetFloat("_Metallic", 0f);
+                                blockSystem.blockScripts[i].selected = false;
                             }
                         }
                     }
