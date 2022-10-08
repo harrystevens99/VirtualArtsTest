@@ -17,12 +17,6 @@ public class BlockSystem : MonoBehaviour
     public Color paintColour = new Color(1, 0, 0, 1);
     public int activeBlocks = 0;
     public int totalBlocks;
-    public Renderer orbUp;
-    public Renderer orbDown;
-    public Renderer orbLeft;
-    public Renderer orbRight;
-    public Renderer orbForward;
-    public Renderer orbBack;
     public Mesh sphere;
     public Mesh cube;
     public bool moving;
@@ -41,8 +35,13 @@ public class BlockSystem : MonoBehaviour
     private Vector3[] directions;
     private Orb[] orbScripts;
     private Renderer[] orbRenderers;
-    [SerializeField] private GameObject[] orbObjects;
+    public GameObject[] orbObjects;
     private int orbIndex = 0;
+    public bool segmentStartFlag = false;
+    public GameObject segmentPlaceWireFrame;
+    private Vector3 segmentStart;
+    private Vector3 segmentEnd;
+    [SerializeField] private GameObject segmentOutline;
     
 
     // Start is called before the first frame update
@@ -108,6 +107,9 @@ public class BlockSystem : MonoBehaviour
                     //Move cube
                     MoveBlock();
                     break;
+                case 4:
+                    SegmentPlace();
+                    break;
             }
 
 
@@ -116,9 +118,111 @@ public class BlockSystem : MonoBehaviour
                 placeCheck = true;
                 breakCheck = true;
             }
+
+            if(segmentStartFlag == false)
+            {
+                segmentPlaceWireFrame.transform.position = new Vector3(1000, 1000, 1000);
+                segmentOutline.transform.position = new Vector3(1000, 1000, 1000);
+                segmentOutline.transform.localScale = new Vector3(1, 1, 1);
+            }
         }
     }
 
+    void SegmentPlace()
+    {
+        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 5, placeable))
+        {
+            cubePoint.x = Mathf.RoundToInt(hit.point.x);
+            cubePoint.y = Mathf.RoundToInt(hit.point.y);
+            cubePoint.z = Mathf.RoundToInt(hit.point.z);
+            wireFrameCube.transform.position = cubePoint;
+            canBreak = true;
+        }
+        else
+        {
+            wireFrameCube.transform.position = new Vector3(1000, 1000, 1000);
+            canBreak = false;
+        }
+
+        if (segmentStartFlag == false)
+        {
+            if (canBreak == true && Input.GetMouseButtonDown(0) && breakCheck == true)
+            {
+                segmentStartFlag = true;
+                segmentPlaceWireFrame.transform.position = cubePoint;
+                segmentStart = cubePoint;
+                breakCheck = false;
+            }
+        }
+        else
+        {
+            int zVec = 1; int yVec = 1; int xVec = 1;
+
+            if (canBreak == false)
+            {
+                segmentOutline.transform.localScale = new Vector3(1, 1, 1);
+                segmentOutline.transform.position = new Vector3(1000, 1000, 1000);
+            }
+            else
+            {
+                //Difference in location on each axis dictates how each loop iterates from the start point to the end point
+                if ((segmentStart.z - segmentEnd.z) > 0) { zVec *= -1; }
+                if ((segmentStart.y - segmentEnd.y) > 0) { yVec *= -1; }
+                if ((segmentStart.x - segmentEnd.x) > 0) { xVec *= -1; }
+
+                segmentEnd = cubePoint;
+                segmentOutline.transform.localScale = new Vector3(segmentStart.x - segmentEnd.x - xVec, segmentStart.y - segmentEnd.y - yVec, segmentStart.z - segmentEnd.z - zVec);
+                segmentOutline.transform.position = (segmentStart + segmentEnd) / 2;
+
+                if (Input.GetMouseButtonDown(0) && breakCheck == true)
+                {
+                    for (int y = (int)segmentStart.y; y != (int)segmentEnd.y + yVec; y += yVec)
+                    {
+                        //each y-axis column filled with cubes
+                        for (int z = (int)segmentStart.z; z != (int)segmentEnd.z + zVec; z += zVec)
+                        {
+                            //each z-axis column filled with cubes
+                            for (int x = (int)segmentStart.x; x != (int)segmentEnd.x + xVec; x += xVec)
+                            {
+                                //each x-axis column filled with cubes
+                                Vector3 pos = new Vector3(x, y, z);
+                                if (!Physics.CheckSphere(pos, 0.1f, breakAble))
+                                {
+                                    for (int i = 0; i < blockScripts.Length; i++)
+                                    {
+                                        if (blockScripts[i] != null)
+                                        {
+                                            if (blockScripts[i].placed == false && placeCheck == true)
+                                            {
+                                                activeBlocks++;
+                                                blockScripts[i].type = blockType;
+                                                switch (blockType)
+                                                {
+                                                    case 0:
+                                                        blockMeshFilters[i].mesh = cube;
+                                                        break;
+                                                    case 1:
+                                                        blockMeshFilters[i].mesh = sphere;
+                                                        break;
+                                                }
+                                                blockRenderers[i].enabled = true;
+                                                blockColliders[i].enabled = true;
+                                                blocks[i].transform.position = pos;
+                                                blockScripts[i].placed = true;
+                                                placeCheck = false;
+                                            }
+                                        }
+                                    }
+                                }
+                                placeCheck = true;
+                            }
+                        }
+                    }
+                    segmentStartFlag = false;
+                }
+            }
+        }
+    }
 
     void PlaceWireFrameCube()
     {
@@ -225,12 +329,7 @@ public class BlockSystem : MonoBehaviour
 
             if (canBreak == true && Input.GetMouseButtonDown(0) && breakCheck == true)
             {
-                orbUp.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y + 2f, hit.transform.position.z);
-                orbDown.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y - 2f, hit.transform.position.z);
-                orbLeft.transform.position = new Vector3(hit.transform.position.x - 2f, hit.transform.position.y, hit.transform.position.z);
-                orbRight.transform.position = new Vector3(hit.transform.position.x + 2f, hit.transform.position.y, hit.transform.position.z);
-                orbForward.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z + 2f);
-                orbBack.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 2f);
+                PlaceOrbs();
 
                 //All cubes un-selected first
 
@@ -254,12 +353,10 @@ public class BlockSystem : MonoBehaviour
         }
         else
         {
-            orbUp.material.color = new Color(1, 0, 1, 1);
-            orbDown.material.color = new Color(1, 0, 1, 1);
-            orbLeft.material.color = new Color(1, 0, 1, 1);
-            orbRight.material.color = new Color(1, 0, 1, 1);
-            orbForward.material.color = new Color(1, 0, 1, 1);
-            orbBack.material.color = new Color(1, 0, 1, 1);
+            for(int i = 0; i < orbRenderers.Length; i++)
+            {
+                orbRenderers[i].material.color = new Color(1, 0, 1, 1);
+            }
 
             if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 100, orbs))
             {
@@ -290,12 +387,7 @@ public class BlockSystem : MonoBehaviour
 
                 breakCheck = false;
                 wireFrameCube.transform.position = wireFrameCube.transform.position + orbScripts[orbIndex].direction;
-                orbUp.transform.position = new Vector3(wireFrameCube.transform.position.x, wireFrameCube.transform.position.y + 2f, wireFrameCube.transform.position.z);
-                orbDown.transform.position = new Vector3(wireFrameCube.transform.position.x, wireFrameCube.transform.position.y - 2f, wireFrameCube.transform.position.z);
-                orbLeft.transform.position = new Vector3(wireFrameCube.transform.position.x - 2f, wireFrameCube.transform.position.y, wireFrameCube.transform.position.z);
-                orbRight.transform.position = new Vector3(wireFrameCube.transform.position.x + 2f, wireFrameCube.transform.position.y, wireFrameCube.transform.position.z);
-                orbForward.transform.position = new Vector3(wireFrameCube.transform.position.x, wireFrameCube.transform.position.y, wireFrameCube.transform.position.z + 2f);
-                orbBack.transform.position = new Vector3(wireFrameCube.transform.position.x, wireFrameCube.transform.position.y, wireFrameCube.transform.position.z - 2f);
+                PlaceOrbs();
 
                 for (int i = 0; i < blocks.Length; i++)
                 {
@@ -303,7 +395,7 @@ public class BlockSystem : MonoBehaviour
                     {
                         if(blockScripts[i].placed == true && blockScripts[i].selected == true)
                         {
-                            PlaceOrbs(blocks[i].transform);
+                            RemoveOrbs(blocks[i].transform);
                         }
                     }
                 }
@@ -311,8 +403,17 @@ public class BlockSystem : MonoBehaviour
         }
     }
 
+    void PlaceOrbs()
+    {
+        orbObjects[0].transform.position = new Vector3(wireFrameCube.transform.position.x, wireFrameCube.transform.position.y + 2f, wireFrameCube.transform.position.z);
+        orbObjects[1].transform.position = new Vector3(wireFrameCube.transform.position.x, wireFrameCube.transform.position.y - 2f, wireFrameCube.transform.position.z);
+        orbObjects[2].transform.position = new Vector3(wireFrameCube.transform.position.x - 2f, wireFrameCube.transform.position.y, wireFrameCube.transform.position.z);
+        orbObjects[3].transform.position = new Vector3(wireFrameCube.transform.position.x + 2f, wireFrameCube.transform.position.y, wireFrameCube.transform.position.z);
+        orbObjects[4].transform.position = new Vector3(wireFrameCube.transform.position.x, wireFrameCube.transform.position.y, wireFrameCube.transform.position.z + 2f);
+        orbObjects[5].transform.position = new Vector3(wireFrameCube.transform.position.x, wireFrameCube.transform.position.y, wireFrameCube.transform.position.z - 2f);
+    }
 
-    void PlaceOrbs(Transform pos)
+    void RemoveOrbs(Transform pos)
     {
         for(int i = 0; i < orbScripts.Length; i++)
         {
@@ -344,8 +445,9 @@ public class BlockSystem : MonoBehaviour
     {
         int index = System.Array.IndexOf(blocks, point.gameObject);
         blockScripts[index].selected = true;
+        blockRenderers[index].material.SetFloat("_Metallic", 0.5f);
 
-        for(int i = 0; i < directions.Length; i++)
+        for (int i = 0; i < directions.Length; i++)
         {
             if (Physics.Raycast(point.position, directions[i], out hit, 0.6f, breakAble))
             {
@@ -353,6 +455,7 @@ public class BlockSystem : MonoBehaviour
                 if (blockScripts[hitIndex].selected == false)
                 {
                     blockScripts[hitIndex].selected = true;
+                    blockRenderers[hitIndex].material.SetFloat("_Metallic", 0.5f);
                     FindCubes(hit.transform);
                 }
             }

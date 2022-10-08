@@ -55,12 +55,10 @@ public class PauseMenu : MonoBehaviour
             {
                 if (ui.mode == 3)
                 {
-                    blockSystem.orbUp.gameObject.transform.position = new Vector3(1000, 1000, 1000);
-                    blockSystem.orbDown.gameObject.transform.position = new Vector3(1000, 1000, 1000);
-                    blockSystem.orbLeft.gameObject.transform.position = new Vector3(1000, 1000, 1000);
-                    blockSystem.orbRight.gameObject.transform.position = new Vector3(1000, 1000, 1000);
-                    blockSystem.orbForward.gameObject.transform.position = new Vector3(1000, 1000, 1000);
-                    blockSystem.orbBack.gameObject.transform.position = new Vector3(1000, 1000, 1000);
+                    for(int i = 0; i < blockSystem.orbObjects.Length; i++)
+                    {
+                        blockSystem.orbObjects[i].gameObject.transform.position = new Vector3(1000, 1000, 1000);
+                    }
 
                     blockSystem.moving = false;
 
@@ -77,6 +75,10 @@ public class PauseMenu : MonoBehaviour
                     }
 
                     ui.mode--;
+                }
+                else if(ui.mode == 4)
+                {
+                    blockSystem.segmentStartFlag = false;
                 }
             }
         }
